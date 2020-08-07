@@ -12,7 +12,7 @@
     <img src="https://img.shields.io/badge/license-Apache2-blue.svg?style=flat" alt="Apache 2">
 </p>
 
-# React UI Patterns with Node.js
+# Node.js React Carbon PostGreSQL Starter Kit
 
 React is a popular framework for creating user interfaces in modular components. In this sample application, you will create a web application using Express and React to serve web pages in Node.js, complete with standard best practices, including a health check and application metric monitoring.
 
@@ -25,8 +25,92 @@ This app contains an opinionated set of components for modern web development, i
 * [Sass](http://sass-lang.com/) 
 * [gulp](http://gulpjs.com/)
 * [Carbon](https://www.carbondesignsystem.com/)
+* [PostGreSQL](https://node-postgres.com/)
 
-### Deploying 
+### Building Locally
+
+To get started building this application locally, you can either run the application natively or use the [IBM Cloud Developer Tools](https://cloud.ibm.com/docs/cli?topic=cloud-cli-getting-started) for containerization and easy deployment to IBM Cloud.
+
+### Cloud-Native Application Development
+
+#### Add a Database to your PostGreSQL instance
+
+Run the following DDL while connected to your PostGreSQL instance. This will create a database and a table 
+and load it with two rows of values.
+
+```
+CREATE DATABASE inventory;
+
+DROP TABLE IF EXISTS stock_items;
+
+CREATE TABLE stock_items (
+	sku_id serial PRIMARY KEY,
+	name VARCHAR ( 50 ) UNIQUE NOT NULL,
+	stock VARCHAR ( 10 ) NOT NULL,
+	description VARCHAR ( 255 ) UNIQUE NOT NULL,
+	unit_price NUMERIC(5,2) UNIQUE NOT NULL,
+	manufacturer VARCHAR(50) UNIQUE NOT NULL,
+	picture_url VARCHAR( 255 ) UNIQUE NOT NULL
+);
+
+INSERT INTO stock_items (sku_id, name, stock, description, unit_price, manufacturer, picture_url)
+VALUES ('00012020', 'Kettle', 23, 'Electric Kettle', 24.99, 'Ikea', 'https://www.ikea.com/ca/en/images/products/vattentaet-kettle-stainless-steel-black__0713344_PE729450_S5.JPG?f=sg'),
+       ('00023350', 'Toaster', 56, 'Electric Toaster', 49.99, 'Amazon', 'https://images-na.ssl-images-amazon.com/images/I/61bHAS2dovL._AC_SX522_.jpg')
+
+SELECT * FROM stock_items;
+``` 
+
+### Build Server Code
+
+Install the latest [Node.js](https://nodejs.org/en/download/) 6+ LTS version.
+
+Once the Node tools have been installed, you can download the project dependencies with:
+
+
+Create a shell script to run the Node.js Server and enable it to access
+a remote PostGreSQL instance call it `start.sh`  
+```
+#!/usr/bin/env bash
+
+export PGHOST={host of PostGreSQL instance}}
+export PGUSER={username from credentials}
+export PGPASSWORD={password from credentials}
+export PGDATABASE=ibmclouddb
+export PGPORT=32403
+npm run dev
+```
+Enable the shell script to be executed on the CLI
+```
+chmod +x start.sh
+```
+
+Build and run the server code in a seperate CLI connecting the the remote PostGreSQL instance
+```
+npm install
+npm run build
+./start.sh
+```
+Validate you can access the server component of the application
+
+Open `localhost:3000/stock/connection` to check you connection parameters, check  `localhost:3000` loads the 
+simple application and loads the data
+
+#### Build and run the Client Code code
+```bash
+cd client 
+npm install
+npm install -g serve
+npm run build
+serve -s build
+```
+
+Open a browser and access the client clode, open `http://localhost:5000`
+
+Validate the Application is connecting to the Database
+
+Modern web applications require a compilation step to prepare your ES2015 JavaScript or Sass stylesheets into compressed Javascript ready for a browser. Webpack is used for bundling your JavaScript sources and styles into a `bundle.js` file that your `index.html` file can import. 
+
+### Deploying to OpenShift
 
 After you have created a new git repo from this git template, remember to rename the project.
 Edit `package.json` and change the default name to the name you used to create the template.
@@ -38,29 +122,27 @@ to you development cluster. If you are using OpenShift make sure you have logged
 npm i -g @garage-catalyst/ibm-garage-cloud-cli
 ```
 
-Use the IBM Garage for Cloud CLI to register the GIT Repo with Jenkins 
+Use the Cloud-Native Toolkit OpenShift CLI Extentions to register the GIT Repo with Tekton 
 
 ```$bash
-igc register
-```
-### Building Locally
-
-To get started building this application locally, you can either run the application natively or use the [IBM Cloud Developer Tools](https://cloud.ibm.com/docs/cli?topic=cloud-cli-getting-started) for containerization and easy deployment to IBM Cloud.
-
-#### Native Application Development
-
-Install the latest [Node.js](https://nodejs.org/en/download/) 6+ LTS version.
-
-Once the Node toolchain has been installed, you can download the project dependencies with:
-
-```bash
-npm install
-cd client; npm install; cd ..
-npm run build
-npm run start
+oc sync {project} --dev
+oc pipeline --tekton
 ```
 
-Modern web applications require a compilation step to prepare your ES2015 JavaScript or Sass stylesheets into compressed Javascript ready for a browser. Webpack is used for bundling your JavaScript sources and styles into a `bundle.js` file that your `index.html` file can import. 
+### Deploying to Cloud Foundry
+
+Define PostGreSQL values in the Cloud Foundry instance
+```
+PGHOST {host of PostGreSQL instance}}
+PGUSER {username from credentials}
+PGPASSWORD {password from credentials}
+PGDATABASE ibmclouddb
+PGPORT 32403
+```
+
+```
+cf push
+```
 
 ***Webpack***
 
@@ -81,33 +163,6 @@ npm run start
 ```
 
 Your application will be running at `http://localhost:3000`.  You can access the `/health` and `/appmetrics-dash` endpoints at the host.
-
-<!--
-#### IBM Cloud Developer Tools
-
-Install [IBM Cloud Developer Tools](https://cloud.ibm.com/docs/cli?topic=cloud-cli-getting-started) on your machine by running the following command:
-```
-curl -sL https://ibm.biz/idt-installer | bash
-```
-
-Your application will be compiled with Docker containers. To compile and run your app, run:
-```bash
-ibmcloud dev build
-ibmcloud dev run
-```
-
-This will launch your application locally. When you are ready to deploy to IBM Cloud on Cloud Foundry or Kubernetes, run one of the following commands:
-```bash
-ibmcloud dev deploy -t buildpack
-ibmcloud dev deploy -t container
-```
-
-You can build and debug your app locally with:
-```bash
-ibmcloud dev build --debug
-ibmcloud dev debug
-```
--->
 
 ##### Session Store
 

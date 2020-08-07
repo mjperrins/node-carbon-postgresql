@@ -9,6 +9,7 @@ vcap-local.js
 credentials.json
 localdev-config.json
 index.yaml
+start.sh
 
 # dependencies
 /node_modules

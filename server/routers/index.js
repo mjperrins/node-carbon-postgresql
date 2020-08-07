@@ -7,4 +7,8 @@ module.exports = function(app, server){
     require('./health')(app);
 
     require('./api')(app);
+
+    require('./stockitems')(app);
+
+
 };
