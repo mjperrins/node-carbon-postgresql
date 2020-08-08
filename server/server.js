@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 IBM Corp. All Rights Reserved.
+ * Copyright 2020 IBM Corp. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the 'License'); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -22,6 +22,10 @@ const localConfig = require("./config/local.json");
 const path = require("path");
 var cookieParser = require("cookie-parser");
 
+const { Pool, Client } = require('pg')
+const util = require('util')
+const assert = require('assert');
+
 const initTracer = require('./util/init-tracing');
 
 const tracer = initTracer('inventory-ui')
@@ -36,6 +40,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "../client/build")));
 
+var https = require('https');
+var fs = require('fs');
+
+
 const server = http.createServer(app);
 
 app.use(
@@ -44,8 +52,6 @@ app.use(
 const serviceManager = require("./services/service-manager");
 require("./services/index")(app);
 require("./routers/index")(app, server);
-
-// Add your code here
 
 const port = process.env.PORT || localConfig.port;
 server.listen(port, function() {

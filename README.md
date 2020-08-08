@@ -68,15 +68,11 @@ Once the Node tools have been installed, you can download the project dependenci
 
 
 Create a shell script to run the Node.js Server and enable it to access
-a remote PostGreSQL instance call it `start.sh`  
+a remote PostGreSQL instance call it `start.sh` extract the values from the Connection String provided for the Service binding in IBM Cloud.  
 ```
 #!/usr/bin/env bash
-
-export PGHOST={host of PostGreSQL instance}}
-export PGUSER={username from credentials}
-export PGPASSWORD={password from credentials}
-export PGDATABASE=ibmclouddb
-export PGPORT=32403
+export PGCERT={connection.postgres.certificate.certificate.base64 value}
+export PGURI={connection.postgres.composed value}
 npm run dev
 ```
 Enable the shell script to be executed on the CLI
