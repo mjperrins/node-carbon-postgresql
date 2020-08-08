@@ -39,8 +39,6 @@ Run the following DDL while connected to your PostGreSQL instance. This will cre
 and load it with two rows of values.
 
 ```
-CREATE DATABASE inventory;
-
 DROP TABLE IF EXISTS stock_items;
 
 CREATE TABLE stock_items (
@@ -65,7 +63,6 @@ SELECT * FROM stock_items;
 Install the latest [Node.js](https://nodejs.org/en/download/) 6+ LTS version.
 
 Once the Node tools have been installed, you can download the project dependencies with:
-
 
 Create a shell script to run the Node.js Server and enable it to access
 a remote PostGreSQL instance call it `start.sh` extract the values from the Connection String provided for the Service binding in IBM Cloud.  
@@ -127,13 +124,12 @@ oc pipeline --tekton
 
 ### Deploying to Cloud Foundry
 
-Define PostGreSQL values in the Cloud Foundry instance
+Add a `manifest.yaml` to you project before kicking off a `cp push`
+
+Define PostGreSQL values in the Cloud Foundry instance, take these from the Service Connection JSON specification
 ```
-PGHOST {host of PostGreSQL instance}}
-PGUSER {username from credentials}
-PGPASSWORD {password from credentials}
-PGDATABASE ibmclouddb
-PGPORT 32403
+PGCERT {connection.postgres.certificate.certificate.base64 value}
+PGURI {connection.postgres.composed value}
 ```
 
 ```
