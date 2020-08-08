@@ -2,12 +2,12 @@ import * as superagent from 'superagent';
 
 export class StockItemService {
   constructor(baseUrl) {
-    this.baseUrl = baseUrl || '/api';
+    this.baseUrl = baseUrl || '';
   }
 
   async listStockItems() {
     return superagent
-        .get(this.baseUrl + '/stock-items')
+        .get(this.baseUrl + '/stock/items')
         .set('accept', 'application/json')
         .then(res => {
           console.log('Got response: ', res);

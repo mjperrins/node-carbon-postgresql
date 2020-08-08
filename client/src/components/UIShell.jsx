@@ -23,7 +23,7 @@ const Fade20 = () => (
 );
 
 class UIShell extends Component {
-  header = "Stock Inc.";
+  header = "Karuturi Inc.";
   menuTitle = "Inventory Management";
   menuItems = [
     "Stock Items",

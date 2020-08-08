@@ -13,44 +13,20 @@ import Header from "../pattern-components/Header";
 import "../pattern-components/patterns.scss";
 
 class StockItemList extends Component {
-  title = 'Stock Items';
+  title = 'Stock Inventory';
   subtitle = 'This is the current inventory of items';
 
   columns = [
+    "sku_id",
     "name",
-    "description",
     "stock",
-    "unitPrice",
-    "picture",
+    "description",
+    "unit_price",
     "manufacturer",
+    "picture_url",
   ];
   formatters = {};
-  data = [
-    {
-      "name": "Item 1",
-      "description": "The first item",
-      "stock": 10,
-      "unitPrice": 100.0,
-      "picture": "test",
-      "manufacturer": "unknown",
-    },
-    {
-      "name": "Item 2",
-      "description": "The second item",
-      "stock": 15,
-      "unitPrice": 120.5,
-      "picture": "test1",
-      "manufacturer": "Apple",
-    },
-    {
-      "name": "Item 3",
-      "description": "The third item",
-      "stock": 20,
-      "unitPrice": 75.5,
-      "picture": "test1",
-      "manufacturer": "Sony",
-    }
-  ];
+  data = [];
 
   constructor(props) {
     super(props);
@@ -93,11 +69,24 @@ class StockItemList extends Component {
         {this.columns.map(col => {
           const format = this.formatters[col] || function(val) { return val; };
 
-          return (
-            <StructuredListCell key={col} className="simple-list-row">
-              {format(row[col])}
-            </StructuredListCell>
-          );
+          if (col == "picture_url") {
+
+            return (
+                <StructuredListCell key={col} className="simple-list-row">
+                  <img src={format(row[col])} class="thumbnail"/>
+                </StructuredListCell>
+            );
+
+          } else {
+
+            return (
+                <StructuredListCell key={col} className="simple-list-row">
+                  {format(row[col])}
+                </StructuredListCell>
+            );
+
+          }
+
         })}
       </StructuredListRow>
     );
@@ -120,10 +109,13 @@ class StockItemList extends Component {
                   <StructuredListCell head />
                   {this.columns.map(key => {
                     return (
+
                       <StructuredListCell head key={key}>
                         {key.charAt(0).toUpperCase() +
                           key.slice(1).replace(/([A-Z])/g, " $1")}
                       </StructuredListCell>
+
+
                     );
                   })}
                 </StructuredListRow>
@@ -131,6 +123,9 @@ class StockItemList extends Component {
 
               <StructuredListBody>
                 {data.map((row, i) => {
+
+                  if ( row)
+
                   return this.renderRow(row, i);
                 })}
               </StructuredListBody>

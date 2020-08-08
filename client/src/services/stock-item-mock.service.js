@@ -7,28 +7,22 @@ export class StockItemMockService {
 
     return [
       {
-        "name": "Item 1",
-        "description": "The first item",
-        "stock": 10,
-        "unitPrice": 100.0,
-        "picture": "test",
-        "manufacturer": "unknown",
+        "sku_id": 12020,
+        "name": "Kettle",
+        "stock": "23",
+        "description": "Electric Kettle",
+        "unit_price": "24.99",
+        "manufacturer": "Ikea",
+        "picture_url": "https://www.ikea.com/ca/en/images/products/vattentaet-kettle-stainless-steel-black__0713344_PE729450_S5.JPG?f=sg"
       },
       {
-        "name": "Item 2",
-        "description": "The second item",
-        "stock": 15,
-        "unitPrice": 120.5,
-        "picture": "test1",
-        "manufacturer": "Apple",
-      },
-      {
-        "name": "Item 3",
-        "description": "The third item",
-        "stock": 20,
-        "unitPrice": 75.5,
-        "picture": "test1",
-        "manufacturer": "Sony",
+        "sku_id": 23350,
+        "name": "Toaster",
+        "stock": "56",
+        "description": "Electric Toaster",
+        "unit_price": "49.99",
+        "manufacturer": "Amazon",
+        "picture_url": "https://images-na.ssl-images-amazon.com/images/I/61bHAS2dovL._AC_SX522_.jpg"
       }
     ];
   }
